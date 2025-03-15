@@ -27,7 +27,7 @@ function initGame() {
 
     shuffleArray(cards);
 
-    for(let i = 0; i < cards.length; i++){
+    for (let i = 0; i < cards.length; i++) {
         createCard(cards[i]);
     }
 
@@ -42,14 +42,13 @@ function initGame() {
 function createCard(symbol) {
     let cardDiv = document.createElement('div')
     cardDiv.classList.add('card');
+
     let text = document.createElement('p')
     text.innerText = '';
-        
+
     cardDiv.appendChild(text)
-
     cardDiv.dataset.symbol = symbol;
-
-    cardDiv.addEventListener('click', ()=>flipCard(cardDiv));
+    cardDiv.addEventListener('click', () => flipCard(cardDiv));
 
     let gameBoard = document.getElementById('game-board')
     gameBoard.appendChild(cardDiv)
@@ -66,17 +65,16 @@ function createCard(symbol) {
 function flipCard(card) {
     // If the board is supposed to be locked or you picked the same card you already picked
     if (lockBoard || card === firstCard) return;
-    
-    if(!firstCard) {
+
+    if (!firstCard) {
         firstCard = card;
-        card.classList.add('flipped');
-        card.innerHTML = "<p>" + symbols[card.dataset.symbol] + "</p>";
     } else if (!secondCard) {
         secondCard = card;
-        card.classList.add('flipped');
-        card.innerHTML = "<p>" + symbols[card.dataset.symbol] + "</p>";
         checkForMatch();
     }
+
+    card.classList.add('flipped');
+    card.textContent = symbols[card.dataset.symbol];
 }
 
 /* 
@@ -85,7 +83,11 @@ function flipCard(card) {
     Otherwise, you should unflip the card and continue playing normally.
 */
 function checkForMatch() {
-    // Write your code here
+    if (firstCard.dataset.symbol === secondCard.dataset.symbol) {
+        disableCards();
+    } else {
+        unflipCards();
+    }
 }
 
 /* 
@@ -94,9 +96,11 @@ function checkForMatch() {
     to reset the firstCard, secondCard, and lockBoard variables. (That's been written for you already)
 */
 function disableCards() {
-    // Write your code here
+    firstCard.classList.add('matched');
+    secondCard.classList.add('matched');
+    resetBoard();
 }
- 
+
 /* ---------------------  Everything under has already been done for you -------------------------- */
 
 function unflipCards() {
