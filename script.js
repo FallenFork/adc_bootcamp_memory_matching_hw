@@ -8,7 +8,7 @@
 // These are all the symbols that the game is going to use
 const symbols = ['🍎', '🍌', '🍇', '🍓', '🍍', '🍉', '🍒', '🥝'];
 // You're going to need this to display the cards on the screen (remember there should be two of each card)
-let cards = [];
+let cards = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7];
 // These will be used when the user starts choosing cards
 let firstCard = null, secondCard = null;
 // You will need to lock the board to stop users from choosing cards when they choose two wrong cards
@@ -22,7 +22,14 @@ let lockBoard = false;
 
 */
 function initGame() {
-    // Write your code here
+    let gameDiv = document.getElementById('game-board');
+    gameDiv.innerHTML = '';
+
+    shuffleArray(cards);
+
+    for(let i = 0; i < cards.length; i++){
+        createCard(cards[i]);
+    }
 
     document.getElementById('restart-btn').addEventListener('click', initGame);
 }
@@ -33,7 +40,19 @@ function initGame() {
     Also make sure to add the event listener with the 'flipCard' function
 */
 function createCard(symbol) {
-    // Write your code here
+    let cardDiv = document.createElement('div')
+    cardDiv.classList.add('card');
+    let text = document.createElement('p')
+    text.innerText = '';
+        
+    cardDiv.appendChild(text)
+
+    cardDiv.dataset.symbol = symbol;
+
+    cardDiv.addEventListener('click', ()=>flipCard(cardDiv));
+
+    let gameBoard = document.getElementById('game-board')
+    gameBoard.appendChild(cardDiv)
 }
 
 /*
@@ -47,7 +66,17 @@ function createCard(symbol) {
 function flipCard(card) {
     // If the board is supposed to be locked or you picked the same card you already picked
     if (lockBoard || card === firstCard) return;
-    // Write your code here
+    
+    if(!firstCard) {
+        firstCard = card;
+        card.classList.add('flipped');
+        card.innerHTML = "<p>" + symbols[card.dataset.symbol] + "</p>";
+    } else if (!secondCard) {
+        secondCard = card;
+        card.classList.add('flipped');
+        card.innerHTML = "<p>" + symbols[card.dataset.symbol] + "</p>";
+        checkForMatch();
+    }
 }
 
 /* 
